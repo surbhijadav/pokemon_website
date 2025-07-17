@@ -1,10 +1,11 @@
 import { useEffect, useState } from "react";
 import "./pokemon.css";
 import { PokemonCard } from "./pokemonCard";
+
 export const Pokemon = () =>{
     const [pokemon,setPokemon] = useState([]);
     const [loading,setLoading] = useState(true);
-    const[error,setError] = useState("");
+    const[error,setError] = useState(null);
     const  [search,setSearch] = useState("");
 
     const API = "https://pokeapi.co/api/v2/pokemon?limit=124";
@@ -19,6 +20,7 @@ export const Pokemon = () =>{
             const data = await res.json();
             return data;
             });
+
             const detailedResponse = await Promise.all(detailedPokemonData);
             console.log(detailedResponse);
             setPokemon(detailedResponse);
@@ -26,6 +28,7 @@ export const Pokemon = () =>{
         } catch (error) {
             console.log(Error);
             setLoading(false);
+            setError(error);
         }
     };
 
@@ -56,21 +59,25 @@ export const Pokemon = () =>{
                 <h1>Let's Catch Pokemon!!</h1>
             </header>
             <div className="pokemon-search">
-                <input type="text" 
+                <input 
+                type="text" 
                 placeholder="search pokemon" 
                 value={search} 
-                onChange = {(e) => setSearch(e.target.value)}/>
+                onChange = {(e) => setSearch(e.target.value)}
+                />
             </div>
             <div>
                 <ul className="cards">
                     {
                         // pokemon.map((curPokemon)=>{
                             searchData.map((curPokemon)=>{
-                            return <PokemonCard 
+                            // console.log(curPokemon); 
+                            return (
+                            <PokemonCard 
                             key={curPokemon.id} 
                             pokemonData={curPokemon}
                            />
-                        })
+                             ) })
                     }
                 </ul>
             </div>
